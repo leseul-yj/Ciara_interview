@@ -54,7 +54,8 @@
     let containerWidth = $(canvas).width(),
       containerHeight = $(canvas).height(),
       circleRadius = containerWidth < containerHeight ? containerWidth : containerHeight;
-    let minRadiusValue = (parseInt(circleRadius / 3) + 20) < (parseInt(circleRadius / 2)) ? (parseInt(circleRadius / 3) + 20) : (parseInt(circleRadius / 2));
+    let minRadiusValue = (parseInt(circleRadius / 3) + 20) < (parseInt(circleRadius / 2)) ? (parseInt(circleRadius /
+      3) + 20) : (parseInt(circleRadius / 2));
     let circle = {
       x: (containerWidth / 2),
       y: parseInt(circleRadius / 2),
@@ -62,7 +63,12 @@
       speed: 15,
     };
     class WhiteCircle {
-      constructor({x,y,radius,index}) {
+      constructor({
+        x,
+        y,
+        radius,
+        index
+      }) {
         this.x = x;
         this.y = y;
         this.r = radius;
@@ -76,15 +82,15 @@
         this.cache(); // 画一个圆 做缓存 可以减少重新绘制
       }
       paint(rotDegree) {
-        let posy,posx;
+        let posy, posx;
         let radian = (rotDegree - this.cycleNum * 0.8 + 180) * Math.PI / 180; //180可以从上定点开始
         posx = circle.x + Math.sin(radian) * circle.radius - this.r; //Math.sin要用弧度来计算
         posy = circle.y + Math.cos(radian) * circle.radius - this.r;
 
         ctx.shadowColor = 'rgba(0, 0, 0, 0)';
         try {
-          ctx.drawImage(this.cacheCanvas,posx,posy);
-        } catch(err) {
+          ctx.drawImage(this.cacheCanvas, posx, posy);
+        } catch (err) {
           // console.log(this.cacheCanvas);
         }
       }
@@ -93,14 +99,14 @@
         this.cacheCtx.save();
         this.cacheCtx.beginPath();
         this.cacheCtx.fillStyle = grad;
-        this.cacheCtx.arc(this.r,this.r,this.r,0,2 * Math.PI);
+        this.cacheCtx.arc(this.r, this.r, this.r, 0, 2 * Math.PI);
         this.cacheCtx.fill();
         this.cacheCtx.restore();
       }
       grad() {
-        let gradient = this.cacheCtx.createRadialGradient(this.r,this.r,this.r / 2,this.r,this.r,this.r);
-        gradient.addColorStop(0,'rgba(255,255,255,0.35)');
-        gradient.addColorStop(1,'rgba(255,255,255,0)');
+        let gradient = this.cacheCtx.createRadialGradient(this.r, this.r, this.r / 2, this.r, this.r, this.r);
+        gradient.addColorStop(0, 'rgba(255,255,255,0.35)');
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
         return gradient;
       }
       move(rotDegree) {
@@ -120,12 +126,13 @@
         this.backgroundCycle();
       }
       instance() {
-        let radius = 13,count = 100;
-        for(let i = 0; i < count; i++) {
+        let radius = 13,
+          count = 100;
+        for (let i = 0; i < count; i++) {
           radius = 13 * (1 - i / count);
           this.cycleArray.push(new WhiteCircle({
-            x: getRandom(0,canvas.width),
-            y: getRandom(0,canvas.height),
+            x: getRandom(0, canvas.width),
+            y: getRandom(0, canvas.height),
             radius,
             index: i
           }));
@@ -137,7 +144,7 @@
         ctxBottom.shadowoffsetx = 5;
         ctxBottom.shadowoffsety = 5;
         ctxBottom.beginPath();
-        ctxBottom.arc(circle.x,circle.y,circle.radius,0,Math.PI * 2,true);
+        ctxBottom.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2, true);
         ctxBottom.lineWidth = 4;
         ctxBottom.strokeStyle = 'rgba(240, 240, 240, 0.3)';
         ctxBottom.stroke();
@@ -147,14 +154,17 @@
         ctxBottom.textBaseline = 'middle';
         ctxBottom.textAlign = 'center';
         let title = "这是标题";
-        if(titleWidth && ctxBottom.measureText(title).width < titleWidth) {
-          ctxBottom.fillText(title,circle.x - 5,circle.y + 50);
+        if (titleWidth && ctxBottom.measureText(title).width < titleWidth) {
+          ctxBottom.fillText(title, circle.x - 5, circle.y + 50);
         } else {
-          StringTools.wordWrap(ctxBottom,circle.x,circle.y + 50,titleWidth,title,null);
+          StringTools.wordWrap(ctxBottom, circle.x, circle.y + 50, titleWidth, title, null);
         }
       }
       percentText() {
-        let {limitDegree,progressDegree} = this;
+        let {
+          limitDegree,
+          progressDegree
+        } = this;
         let percentText = this.data;
         let percentNum = progressDegree / limitDegree * 100;
         percentText = percentNum > this.data ? parseInt(this.data) + '%' : parseInt(percentNum) + '%';
@@ -168,8 +178,8 @@
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         var textWidth = ctx.measureText(percentText).width + 20;
-        ctx.clearRect(300 - textWidth / 2,300 - 55,textWidth,110);
-        ctx.fillText(percentText,300,300 - 10);
+        ctx.clearRect(300 - textWidth / 2, 300 - 55, textWidth, 110);
+        ctx.fillText(percentText, 300, 300 - 10);
       }
 
       progressBar() {
@@ -180,7 +190,8 @@
         ctx.lineWidth = 4;
         ctx.strokeStyle = 'rgba(222, 222, 222, 0.9)';
         ctx.lineCap = "round";
-        ctx.arc(circle.x,circle.y,circle.radius,-90 * Math.PI / 180,-(this.progressDegree + 90) * Math.PI / 180,true);
+        ctx.arc(circle.x, circle.y, circle.radius, -90 * Math.PI / 180, -(this.progressDegree + 90) * Math.PI / 180,
+          true);
         ctx.stroke();
       }
       update() {
@@ -191,7 +202,7 @@
       }
       // 清楚运动轨迹
       clearRect() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
       // 运动
       cycleRun() {
@@ -199,13 +210,13 @@
       }
       loop = () => {
         let timer = setInterval(() => {
-          if(this.progressDegree <= this.limitDegree) {
+          if (this.progressDegree <= this.limitDegree) {
             this.update();
             this.progressDegree += 8;
           } else {
             clearInterval(timer);
           }
-        },20)
+        }, 20)
       }
       start() {
         this.init();
@@ -213,7 +224,7 @@
       }
     }
 
-    function getRandom(a,b) {
+    function getRandom(a, b) {
       return Math.random() * (b - a) + a;
     }
 
